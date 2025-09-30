@@ -1,6 +1,7 @@
 const express = require("express");
 const Store = require("../models/Store");
 const router = express.Router();
+const { getNearbyStores } = require("../controllers/storeController");
 
 // Create store
 router.post("/", async (req, res) => {
@@ -33,7 +34,7 @@ router.get("/", async (req, res) => {
 
 
 // Get store by id
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", async (req, res) => {
     try {
         const store = await Store.findByPk(req.params.id);
         if (!store) return res.status(404).json({ message: "Store not found" });
@@ -42,5 +43,7 @@ router.get("/:id", async (req, res, next) => {
         return res.status(400).json({ message: err.message });
     }
 });
+
+router.post("/nearby", getNearbyStores);
 
 module.exports = router;
