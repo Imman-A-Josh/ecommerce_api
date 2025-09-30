@@ -4,6 +4,7 @@ const errorHandler = require("./middleware/errorHandler");
 const userRoutes = require("./routes/userRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const productRoutes = require("./routes/productRoutes");
+const storeRoutes = require("./routes/storeRoutes");
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.get("/", (req, res) => res.send("API Running"));
 app.use("/api/users", userRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/stores", storeRoutes);
 
 module.exports = app;

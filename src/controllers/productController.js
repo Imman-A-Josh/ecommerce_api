@@ -21,7 +21,7 @@ exports.createProduct = async (req, res) => {
             image_url: req.file ? `/uploads/products/${req.file.filename}` : null
         });
 
-        res.status(201).json({ message: "Product created", product });
+        res.status(200).json({ message: "Product created", product });
     } catch (err) {
         return res.status(400).json({ message: err.message });
     }

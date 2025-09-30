@@ -19,7 +19,7 @@ exports.register = async (req, res) => {
 
         const user = await User.create({ name, email, password: hashed });
 
-        res.status(201).json({ message: "User registered", user: { id: user.id, name, email } });
+        res.status(200).json({ message: "User registered", user: { id: user.id, name, email } });
     } catch (err) {
         return res.status(400).json({ message: err.message });
     }
@@ -44,7 +44,7 @@ exports.login = async (req, res, next) => {
 
         res.json({ message: "Login successful", token });
     } catch (err) {
-        next(err);
+        return res.status(400).json({ message: err.message });
     }
 };
 
@@ -60,6 +60,6 @@ exports.getUsers = async (req, res, next) => {
 
         res.json({ users: rows, pagination: { total: count, page, totalPages: Math.ceil(count / limit), }, });
     } catch (err) {
-        next(err);
+        return res.status(400).json({ message: err.message });
     }
 };
