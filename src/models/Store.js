@@ -3,9 +3,9 @@ const sequelize = require("../config/db");
 
 const Store = sequelize.define("Store", {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    storeId: { type: DataTypes.STRING, unique: true },
+    storeId: { type: DataTypes.STRING },
     name: { type: DataTypes.STRING, allowNull: false },
-    code: { type: DataTypes.STRING, allowNull: false, unique: true },
+    code: { type: DataTypes.STRING, allowNull: false },
     contact: { type: DataTypes.STRING },
     address_line: { type: DataTypes.STRING, allowNull: false },
     city: { type: DataTypes.STRING, allowNull: false },
