@@ -11,6 +11,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const publicProductRoutes = require("./routes/publicProductRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRouters = require("./routes/orderRouters");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 const app = express();
 
@@ -34,5 +35,6 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/public", publicProductRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRouters);
+app.use("/api/payment", paymentRoutes);
 
 module.exports = app;
