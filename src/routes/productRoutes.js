@@ -6,7 +6,7 @@ const upload = require("../middleware/upload");
 
 router.post("/", auth, upload.single("image"), productController.createProduct);
 
-router.get("/", productController.getProducts);
+router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getProductById);
 
 module.exports = router;

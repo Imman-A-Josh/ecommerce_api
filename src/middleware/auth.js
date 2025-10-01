@@ -7,7 +7,14 @@ module.exports = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
-        next();
+
+        const role = decoded.role;
+
+        if (role == 'admin') {
+            next();
+        } else {
+            return res.status(401).json({ message: "Invalid token" });
+        }
     } catch (err) {
         return res.status(401).json({ message: "Invalid token" });
     }

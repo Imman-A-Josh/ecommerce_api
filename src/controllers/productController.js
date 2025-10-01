@@ -1,51 +1,67 @@
 const Product = require("../models/Product");
+const Brand = require("../models/Brand");
+const Category = require("../models/Category");
 
-// Create product
 exports.createProduct = async (req, res) => {
     try {
-        const { name, sku, description, price, status } = req.body;
+        let { name, sku, description, price, brand_id, category_ids, quantity } = req.body;
 
-        if (!name || !sku || !price) {
-            return res.status(400).json({ message: "Name, SKU, and Price are required" });
+        if (!name || !sku || !price || !brand_id || !category_ids) {
+            return res.status(400).json({ message: "Missing mandatory fields" });
         }
 
-        const exist = await Product.findOne({ where: { sku } });
-        if (exist) return res.status(400).json({ message: "SKU already exists" });
+        if (typeof category_ids == "string") {
+            try {
+                category_ids = JSON.parse(category_ids);
+            } catch (e) {
+                return res.status(400).json({ message: "Invalid category_ids format" });
+            }
+        }
+
+        const brand = await Brand.findByPk(brand_id);
+        if (!brand) return res.status(400).json({ message: "Brand not found" });
+
+        const categories = await Category.findAll({ where: { id: category_ids } });
+        if (categories.length !== category_ids.length) {
+            return res.status(400).json({ message: "One or more categories not found" });
+        }
 
         const product = await Product.create({
-            name,
-            sku,
-            description,
-            price,
-            status,
+            name, sku, description, price, brand_id, quantity,
             image_url: req.file ? `/uploads/products/${req.file.filename}` : null
         });
 
-        res.status(200).json({ message: "Product created", product });
+        await product.setCategories(categories);
+
+        res.status(200).json({ message: "Product Created Successfully" });
     } catch (err) {
-        return res.status(400).json({ message: err.message });
+        res.status(400).json({ message: err.message });
     }
 };
 
-// Get all products
-exports.getProducts = async (req, res) => {
+exports.getAllProducts = async (req, res) => {
     try {
         const products = await Product.findAll({
-            order: [["createdAt", "DESC"]],
+            include: [
+                { model: Brand, as: "brand" },
+                { model: Category, as: "categories" }
+            ],
+            order: [["createdAt", "DESC"]]
         });
         res.json(products);
     } catch (err) {
-        return res.status(400).json({ message: err.message });
+        res.status(400).json({ message: err.message });
     }
 };
 
-
 exports.getProductById = async (req, res) => {
     try {
-        const product = await Product.findByPk(req.params.id);
-        if (!product) return res.status(404).json({ message: "Product not found" });
+        const product = await Product.findByPk(req.params.id, {
+            include: ["brand", "categories"]
+        });
+        if (!product) return res.status(400).json({ message: "Product not found" });
         res.json(product);
     } catch (err) {
-        return res.status(400).json({ message: err.message });
+        res.status(400).json({ message: err.message });
     }
 };
