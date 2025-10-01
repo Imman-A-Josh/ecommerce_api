@@ -10,6 +10,7 @@ const brandRoutes = require("./routes/brandRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const publicProductRoutes = require("./routes/publicProductRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const orderRouters = require("./routes/orderRouters");
 
 const app = express();
 
@@ -32,5 +33,6 @@ app.use("/api/brands", brandRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/public", publicProductRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/order", orderRouters);
 
 module.exports = app;
